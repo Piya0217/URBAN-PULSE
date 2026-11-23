@@ -1,0 +1,16 @@
+
+pyspark==4.3.0
+pandas
+numpy
+pyarrow
+scikit-learn
+matplotlib
+seaborn
+fastapi
+uvicorn
+pydantic
+python-multipart
+joblib
+requests
+jupyter
+ipykernel
