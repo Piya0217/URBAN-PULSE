@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { getYearlyAccidents } from './services/api'
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom'
 import {
   Activity, AlertTriangle, ArrowDownRight, ArrowUpRight, Bell, Bike,
@@ -22,14 +23,7 @@ const navigation = [
   { label: 'Live Monitoring', path: '/live', icon: Radio },
 ]
 
-const accidentTrend = [
-  { day: 'Mon', incidents: 32 }, { day: 'Tue', incidents: 45 },
-  { day: 'Wed', incidents: 38 }, { day: 'Thu', incidents: 58 },
-  { day: 'Fri', incidents: 49 }, { day: 'Sat', incidents: 68 },
-  { day: 'Sun', incidents: 54 }, { day: 'Mon', incidents: 72 },
-  { day: 'Tue', incidents: 61 }, { day: 'Wed', incidents: 82 },
-  { day: 'Thu', incidents: 66 }, { day: 'Fri', incidents: 93 },
-]
+
 
 const violationMix = [
   { name: 'Speeding', value: 38, color: '#20c9c1' },
@@ -97,26 +91,147 @@ function KpiCard({ title, value, unit, change, direction, icon: Icon, tone, note
   </article>
 }
 
-function ChartTooltip({ active, payload, label }) {
-  if (!active || !payload?.length) return null
-  return <div className="chart-tooltip"><span>{label}</span><strong>{payload[0].value} <small>incidents</small></strong></div>
+function AccidentChart() {
+  const [accidentData, setAccidentData] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    let isMounted = true
+
+    const fetchAccidents = async () => {
+      try {
+        const response = await getYearlyAccidents()
+
+        if (response.status !== 'success') {
+          throw new Error('Unable to load accident statistics.')
+        }
+
+        if (isMounted) {
+          setAccidentData(
+            [...response.data].sort(
+              (a, b) => Number(a.year) - Number(b.year)
+            )
+          )
+          setError('')
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError(
+            err.response?.data?.detail ||
+            err.message ||
+            'Unable to connect to the backend.'
+          )
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false)
+        }
+      }
+    }
+
+    fetchAccidents()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  return (
+    <section className="panel chart-card accident-card">
+      <div className="panel-heading">
+        <div>
+          <div className="eyebrow">ROAD SAFETY</div>
+          <h2>Annual accident statistics</h2>
+          <p>Reported crashes across Bengaluru (2023–2025)</p>
+        </div>
+      </div>
+
+      <div className="chart-legend">
+        <span><i className="legend-dot teal-dot" />Total reported crashes</span>
+        <span className="legend-demo">HISTORICAL DATA</span>
+      </div>
+
+      <div className="area-chart-wrap">
+        {loading ? (
+          <p>Loading accident statistics...</p>
+        ) : error ? (
+          <p style={{ color: '#f87171' }}>Error: {error}</p>
+        ) : accidentData.length === 0 ? (
+          <p>No accident records available.</p>
+        ) : (
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart
+              data={accidentData}
+              margin={{ top: 12, right: 8, left: -20, bottom: 0 }}
+            >
+              <defs>
+                <linearGradient id="incidentFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#19c9c0" stopOpacity={0.24} />
+                  <stop offset="100%" stopColor="#19c9c0" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+
+              <CartesianGrid
+                stroke="#1c2b3d"
+                strokeDasharray="3 5"
+                vertical={false}
+              />
+
+              <XAxis
+                dataKey="year"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: '#697c92', fontSize: 11 }}
+                dy={10}
+              />
+
+              <YAxis
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: '#697c92', fontSize: 11 }}
+              />
+
+              <Tooltip
+                formatter={(value) => [
+                  Number(value).toLocaleString('en-IN'),
+                  'Total crashes'
+                ]}
+                contentStyle={{
+                  background: '#111f2f',
+                  border: '1px solid #26394c',
+                  borderRadius: 10,
+                  color: '#edf4fa',
+                  fontSize: 12
+                }}
+              />
+
+              <Area
+                type="monotone"
+                dataKey="total_crashes"
+                stroke="#27d1c5"
+                strokeWidth={2.5}
+                fill="url(#incidentFill)"
+                activeDot={{
+                  r: 5,
+                  fill: '#27d1c5',
+                  stroke: '#0d1826',
+                  strokeWidth: 3
+                }}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        )}
+      </div>
+
+      <div className="chart-footnote">
+        <span>Source: Bengaluru historical crash analytics</span>
+        <span>2023–2025</span>
+      </div>
+    </section>
+  )
 }
 
-function AccidentChart() {
-  return <section className="panel chart-card accident-card">
-    <div className="panel-heading"><div><div className="eyebrow">ROAD SAFETY <DemoTag /></div><h2>Accident trends</h2><p>Incident volume across the last 12 weeks</p></div><button className="period-button">Last 12 weeks <ChevronDown size={14} /></button></div>
-    <div className="chart-legend"><span><i className="legend-dot teal-dot" />Reported incidents</span><span className="legend-demo">Illustrative trend · DEMO DATA</span></div>
-    <div className="area-chart-wrap"><ResponsiveContainer width="100%" height="100%"><AreaChart data={accidentTrend} margin={{ top: 12, right: 8, left: -20, bottom: 0 }}>
-      <defs><linearGradient id="incidentFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#19c9c0" stopOpacity={0.24} /><stop offset="100%" stopColor="#19c9c0" stopOpacity={0} /></linearGradient></defs>
-      <CartesianGrid stroke="#1c2b3d" strokeDasharray="3 5" vertical={false} />
-      <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#697c92', fontSize: 11 }} dy={10} />
-      <YAxis axisLine={false} tickLine={false} tick={{ fill: '#697c92', fontSize: 11 }} ticks={[0, 25, 50, 75, 100]} />
-      <Tooltip content={<ChartTooltip />} cursor={{ stroke: '#526a7b', strokeDasharray: '4 4' }} />
-      <Area type="monotone" dataKey="incidents" stroke="#27d1c5" strokeWidth={2.5} fill="url(#incidentFill)" activeDot={{ r: 5, fill: '#27d1c5', stroke: '#0d1826', strokeWidth: 3 }} />
-    </AreaChart></ResponsiveContainer></div>
-    <div className="chart-footnote"><span><Clock3 size={13} />Updated 8 minutes ago</span><span>Source: sample dataset</span></div>
-  </section>
-}
 
 function ViolationChart() {
   return <section className="panel chart-card violation-card">
@@ -143,7 +258,7 @@ function DataStatus() {
 function Overview() {
   return <div className="page-content">
     <div className="page-heading"><div><div className="eyebrow page-eyebrow">TUESDAY, NOVEMBER 25, 2026 <span className="heading-separator">/</span> CITY OVERVIEW</div><h1>Good morning, Bengaluru <span className="wave">✳</span></h1><p>Here’s what’s happening across your city today.</p></div><div className="heading-actions"><DemoTag /><button className="export-button"><Activity size={15} /> Live overview <span className="live-indicator" /></button></div></div>
-    <div className="demo-banner"><span className="demo-banner-icon"><AlertTriangle size={15} /></span><span><strong>Demo environment</strong> — All metrics and visualizations below are illustrative sample data, not actual Bengaluru statistics.</span></div>
+    <div className="demo-banner"><span className="demo-banner-icon"><AlertTriangle size={15} /></span><span><strong>Demo environment</strong> Some dashboard metrics and visualizations use illustrative sample data. Historical accident statistics are sourced from Bengaluru crash records.</span></div>
     <div className="kpi-grid">
       <KpiCard title="Reported incidents" value="1,284" unit="" change="12.8%" direction="up" note="vs. prior period" icon={CarFront} tone="cyan" />
       <KpiCard title="Traffic violations" value="8,642" unit="" change="6.4%" direction="down" note="vs. prior period" icon={ShieldAlert} tone="blue" />

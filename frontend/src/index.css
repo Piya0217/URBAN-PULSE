@@ -78,16 +78,16 @@ h1,h2,p { margin: 0; }.page-heading h1 { color: #f0f5f9; font-size: clamp(22px, 
 @media (min-width: 1500px) { .page-content { padding-left: 50px; padding-right: 50px; }.topbar { padding-left: 50px; padding-right: 50px; }.kpi-card { padding: 17px 18px 15px; }.area-chart-wrap { height: 220px; }.donut-content { min-height: 220px; } }
 @media (max-width: 1180px) { .sidebar { width: 225px; }.main-area { margin-left: 225px; }.page-content { padding-left: 25px; padding-right: 25px; }.topbar { padding: 0 25px; }.kpi-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }.charts-grid { grid-template-columns: minmax(0,1.3fr) minmax(260px,1fr); }.data-status { gap: 12px; }.data-updated { padding-left: 10px; } }
 @media (max-width: 860px) { .sidebar { width: 252px; transform: translateX(-101%); transition: transform .22s ease; box-shadow: 20px 0 50px #0008; }.sidebar-open { transform: translateX(0); }.sidebar-overlay { display: block; position: fixed; inset: 0; z-index: 19; border: 0; background: #030811a8; }.sidebar-close { display: inline-grid; margin-left: auto; width: 28px; height: 28px; }.main-area { margin-left: 0; }.mobile-menu { display: inline-grid; width: 32px; height: 32px; margin-right: 10px; }.topbar { justify-content: flex-start; }.topbar-project { flex: 1; }.topbar-actions { margin-left: auto; }.charts-grid { grid-template-columns: minmax(0,1.4fr) minmax(260px,1fr); }.system-status { display: none; } }
-@media (max-width: 640px) { .topbar { height: 58px; padding: 0 15px; }.topbar-project { gap: 8px; }.topbar-project-name { font-size: 10px; }.location-label { font-size: 9px; gap: 4px; }.topbar-divider { height: 14px; }.topbar-actions { gap: 8px; }.page-content { padding: 25px 15px 20px; }.page-heading { align-items: flex-start; flex-direction: column; gap: 12px; margin-bottom: 16px; }.heading-actions { align-self: flex-end; margin-top: -39px; }.page-heading h1 { font-size: 22px; }.page-heading p { font-size: 10px; }.page-eyebrow { font-size: 8px; }.demo-banner { align-items: flex-start; line-height: 1.5; font-size: 9px; }.kpi-grid { gap: 9px; }.kpi-card { padding: 12px 11px; }.kpi-icon { width: 28px; height: 28px; }.kpi-card-top .demo-tag { font-size: 7px; padding: 4px; }.kpi-title { font-size: 9px; margin-top: 11px; }.kpi-value { font-size: 22px; }.kpi-note { font-size: 8px; }.change-pill { font-size: 8px; }.kpi-footer { gap: 4px; flex-wrap: wrap; }.charts-grid { grid-template-columns: 1fr; gap: 10px; }.chart-card { padding: 15px 13px 11px; }.area-chart-wrap { height: 185px; }.donut-content { min-height: 180px; }.donut-wrap { height: 155px; }.alerts-card { padding: 15px 13px 0; }.alert-row { gap: 8px; }.alert-title { font-size: 9px; }.alert-place { font-size: 8px; }.alert-time { font-size: 8px; }.footer-demo { font-size: 7px; }.data-status { flex-wrap: wrap; gap: 11px 15px; padding: 11px; }.data-status-main { width: 100%; }.data-updated { margin-left: auto; }.source-status { font-size: 8px; }.page-footer { gap: 10px; font-size: 6px; }.placeholder-page { min-height: calc(100vh - 58px); }.placeholder-panel { min-height: 320px; }.heading-actions > .demo-tag { display: none; } }
-@media (max-width: 380px) { .location-label { max-width: 114px; white-space: nowrap; }.topbar-project-name { max-width: 94px; }.topbar-avatar { display: none; }.kpi-card-top .demo-tag { display: none; }.kpi-footer { display: grid; justify-items: start; gap: 2px; }.alert-time { align-self: flex-start; margin-top: 14px; }.footer-demo { display: none; } }
-
-/* Accident Intelligence */
-.accident-page { padding-top: 31px; }
 .accident-page-heading { align-items: center; margin-bottom: 17px; }.accident-page-heading .page-eyebrow { margin-bottom: 9px; }.accident-page-heading h1 { font-size: 25px; }.heading-demo { align-self: flex-start; margin-top: 3px; }
 .accident-demo-banner { display: flex; align-items: flex-start; gap: 10px; padding: 10px 13px; border: 1px solid #59442b; border-radius: 8px; background: linear-gradient(100deg,#302419b0,#201c18b5); margin-bottom: 14px; }.accident-demo-banner > span { color: #efb15b; margin-top: 1px; }.accident-demo-banner strong { display: block; color: #eab467; font-size: 10px; font-weight: 680; }.accident-demo-banner p { color: #ac9d88; font-size: 9px; margin-top: 3px; line-height: 1.5; }
 .accident-kpi-grid { margin-bottom: 13px; }.accident-kpi { padding: 13px 15px 11px; }.accident-kpi .kpi-title { margin-top: 11px; }.accident-kpi .kpi-value { font-size: 23px; margin: 4px 0 7px; }.accident-kpi .kpi-footer { gap: 6px; }
 .accident-filterbar { display: flex; align-items: center; gap: 11px; padding: 10px 12px; margin-bottom: 14px; }.filterbar-title { display: flex; align-items: center; gap: 8px; min-width: 105px; padding-right: 9px; border-right: 1px solid #233343; }.filterbar-title > span { width: 27px; height: 27px; display: grid; place-items: center; border-radius: 7px; color: #4ed0c4; background: #143136; }.filterbar-title div { display: grid; gap: 3px; }.filterbar-title strong { font-size: 9px; color: #dce6ec; font-weight: 600; }.filterbar-title small { font-size: 8px; color: #6e8194; }.accident-filter { min-width: 130px; position: relative; display: grid; gap: 4px; padding: 0 10px; border-right: 1px solid #203040; }.accident-filter > span { color: #687c90; font-size: 8px; }.accident-filter select { appearance: none; width: 100%; padding: 0 19px 0 0; border: 0; outline: 0; color: #cbd7e1; background: transparent; font: inherit; font-size: 9px; cursor: pointer; }.accident-filter select option { color: #e6edf4; background: #101b28; }.accident-filter > svg { position: absolute; right: 9px; bottom: 2px; pointer-events: none; color: #73869a; }.area-filter { min-width: 162px; border-right: 0; }.filter-demo { display: flex; align-items: center; gap: 6px; margin-left: auto; color: #6b8093; font-size: 8px; white-space: nowrap; }.filter-demo .demo-dot { width: 5px; height: 5px; }
 .accident-content-grid { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(300px,1fr); gap: 14px; margin-bottom: 14px; align-items: stretch; }.accident-map-card,.accident-trend-card,.hotspot-table-card { min-width: 0; overflow: hidden; }.accident-map-card { padding: 15px 15px 13px; }.map-card-heading { display: flex; align-items: flex-start; justify-content: space-between; }.map-card-heading h2,.accident-trend-card h2,.hotspot-table-card h2 { color: #e8eff5; font-size: 13px; font-weight: 600; margin-top: 8px; }.map-card-heading p,.accident-trend-card .panel-heading p,.hotspot-table-card .panel-heading p { color: #718398; font-size: 9px; margin-top: 5px; }.map-action { width: 29px; height: 29px; border: 1px solid #243748; border-radius: 6px; background: #12202d; color: #8193a5; display: grid; place-items: center; cursor: pointer; }.map-action:hover { color: #4ed0c4; border-color: #33616a; }
+@media (max-width: 640px) { .topbar { height: 58px; padding: 0 15px; }.topbar-project { gap: 8px; }.topbar-project-name { font-size: 10px; }.location-label { font-size: 9px; gap: 4px; }.topbar-divider { height: 14px; }.topbar-actions { gap: 8px; }.page-content { padding: 25px 15px 20px; }.page-heading { align-items: flex-start; flex-direction: column; gap: 12px; margin-bottom: 16px; }.heading-actions { align-self: flex-end; margin-top: -39px; }.page-heading h1 { font-size: 22px; }.page-heading p { font-size: 10px; }.page-eyebrow { font-size: 8px; }.demo-banner { align-items: flex-start; line-height: 1.5; font-size: 9px; }.kpi-grid { gap: 9px; }.kpi-card { padding: 12px 11px; }.kpi-icon { width: 28px; height: 28px; }.kpi-card-top .demo-tag { font-size: 7px; padding: 4px; }.kpi-title { font-size: 9px; margin-top: 11px; }.kpi-value { font-size: 22px; }.kpi-note { font-size: 8px; }.change-pill { font-size: 8px; }.kpi-footer { gap: 4px; flex-wrap: wrap; }.charts-grid { grid-template-columns: 1fr; gap: 10px; }.chart-card { padding: 15px 13px 11px; }.area-chart-wrap { height: 185px; }.donut-content { min-height: 180px; }.donut-wrap { height: 155px; }.alerts-card { padding: 15px 13px 0; }.alert-row { gap: 8px; }.alert-title { font-size: 9px; }.alert-place { font-size: 8px; }.alert-time { font-size: 8px; }.footer-demo { font-size: 7px; }.data-status { flex-wrap: wrap; gap: 11px 15px; padding: 11px; }.data-status-main { width: 100%; }.data-updated { margin-left: auto; }.source-status { font-size: 8px; }.page-footer { gap: 10px; font-size: 6px; }.placeholder-page { min-height: calc(100vh - 58px); }.placeholder-panel { min-height: 320px; }.heading-actions > .demo-tag { display: none; } }
+@media (max-width: 380px) { .location-label { max-width: 114px; white-space: nowrap; }.topbar-project-name { max-width: 94px; }.topbar-avatar { display: none; }.kpi-card-top .demo-tag { display: none; }.kpi-footer { display: grid; justify-items: start; gap: 2px; }.alert-time { align-self: flex-start; margin-top: 14px; }.footer-demo { display: none; } }
+
+/* Accident Intelligence */
+.accident-page { padding-top: 31px; }
 .map-frame { position: relative; height: 348px; margin-top: 13px; overflow: hidden; border: 1px solid #29394a; border-radius: 8px; background: #172432; }.accident-map { width: 100%; height: 100%; background: #182532; }.accident-map .leaflet-tile-pane { filter: brightness(.64) saturate(.63) hue-rotate(157deg); }.accident-map .leaflet-control-attribution { color: #8393a2; background: #0b1420d9; font-size: 8px; }.accident-map .leaflet-control-attribution a { color: #56c9c1; }.accident-map .leaflet-control-zoom { border: 1px solid #283b4c !important; box-shadow: 0 2px 9px #0005 !important; }.accident-map .leaflet-control-zoom a { color: #cbd7e0; background: #101d2a; border-color: #283b4c; }.accident-map .leaflet-control-zoom a:hover { color: #53d4c7; background: #162837; }.accident-map .leaflet-popup-content-wrapper,.accident-map .leaflet-popup-tip { background: #112130; color: #dce7ef; }.accident-map .leaflet-popup-content-wrapper { border: 1px solid #2b4354; box-shadow: 0 7px 20px #0007; }.accident-map .leaflet-popup-content { margin: 11px 13px; }.accident-marker-shell { border: 0; background: none; }.accident-marker { display: grid; place-items: center; width: 25px; height: 25px; border: 2px solid #ffffffc9; border-radius: 50%; box-shadow: 0 2px 8px #000a; }.accident-marker span { width: 7px; height: 7px; border-radius: 50%; background: white; }.accident-marker-critical { background: #e46a59d9; box-shadow: 0 0 0 5px #e46a5933, 0 2px 8px #0009; }.accident-marker-high { background: #eaa44bd9; box-shadow: 0 0 0 4px #eaa44b30, 0 2px 8px #0009; }.accident-marker-moderate { background: #36bdb5d9; box-shadow: 0 0 0 4px #36bdb52b, 0 2px 8px #0009; }.accident-marker-low { background: #688ce1d9; box-shadow: 0 0 0 3px #688ce12b, 0 2px 8px #0009; }.accident-map .leaflet-tooltip { color: #e7eef5; background: #101d2a; border: 1px solid #304355; border-radius: 5px; font-size: 9px; box-shadow: 0 3px 10px #0006; }.accident-map .leaflet-tooltip:before { border-top-color: #304355; }.accident-map .leaflet-tooltip span { color: #55cfc3; font-size: 8px; }.map-popup { display: grid; gap: 5px; min-width: 150px; }.map-popup strong { font-size: 11px; }.map-popup span { color: #98a9b8; font-size: 9px; }.map-popup span:last-child { color: #63cfc4; }
 .map-demo-note { position: absolute; z-index: 500; left: 10px; top: 10px; max-width: calc(100% - 62px); display: flex; align-items: flex-start; gap: 7px; padding: 8px 10px; border: 1px solid #58462e; border-radius: 6px; color: #bfad92; background: #111923ed; font-size: 8px; line-height: 1.5; box-shadow: 0 3px 12px #0005; pointer-events: none; }.map-demo-note svg { color: #efb15b; flex: 0 0 auto; }.map-demo-note strong { color: #efb15b; }.map-legend { position: absolute; z-index: 500; left: 10px; bottom: 11px; display: flex; align-items: center; gap: 6px; padding: 7px 9px; border: 1px solid #2a3d4b; border-radius: 6px; color: #b4c1cd; background: #101a25ed; font-size: 8px; box-shadow: 0 3px 12px #0005; }.map-legend > span { color: #7d90a3; margin-right: 2px; }.map-legend i { width: 7px; height: 7px; border-radius: 50%; margin-left: 3px; }.legend-critical { background: #e46a59; }.legend-high { background: #eaa44b; }.legend-moderate { background: #36bdb5; }.legend-low { background: #688ce1; }.map-count { position: absolute; z-index: 500; right: 10px; bottom: 11px; display: flex; align-items: center; gap: 5px; padding: 7px 9px; border: 1px solid #2a3d4b; border-radius: 6px; color: #b6c4d0; background: #101a25ed; font-size: 8px; }.map-count svg { color: #4ccdc2; }
 .accident-trend-card { padding: 16px 16px 12px; }.accident-trend-card .panel-heading { align-items: flex-start; }.trend-period { display: flex; align-items: center; gap: 5px; padding: 6px 7px; border: 1px solid #293c4d; border-radius: 5px; color: #7e91a3; font-size: 8px; white-space: nowrap; }.trend-period svg { color: #e7ae5f; }.trend-chart { height: 220px; margin-top: 14px; }.trend-footer { display: flex; justify-content: space-between; gap: 5px; padding-top: 9px; border-top: 1px solid #1c2a39; color: #64768a; font-size: 8px; }
@@ -95,6 +95,261 @@ h1,h2,p { margin: 0; }.page-heading h1 { color: #f0f5f9; font-size: clamp(22px, 
 @media (max-width: 1180px) { .accident-filterbar { gap: 6px; }.filterbar-title { min-width: 92px; }.accident-filter { min-width: 116px; padding: 0 8px; }.area-filter { min-width: 145px; }.filter-demo { display: none; }.accident-content-grid { grid-template-columns: minmax(0,1.35fr) minmax(275px,1fr); }.map-frame { height: 325px; } }
 @media (max-width: 860px) { .accident-content-grid { grid-template-columns: 1fr; }.map-frame { height: 390px; }.accident-trend-card .trend-chart { height: 230px; }.accident-filterbar { flex-wrap: wrap; }.filterbar-title { flex: 1 0 100%; border: 0; border-bottom: 1px solid #203040; padding: 0 0 8px; }.accident-filter { flex: 1; }.area-filter { flex: 1.2; }.filter-demo { display: flex; } }
 @media (max-width: 640px) { .accident-page { padding-top: 22px; }.accident-page-heading { flex-direction: row; align-items: flex-start; }.accident-page-heading h1 { font-size: 21px; }.heading-demo { margin-top: 1px; }.accident-demo-banner { padding: 9px 10px; }.accident-demo-banner p { font-size: 8px; }.accident-kpi-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }.accident-kpi { padding: 11px; }.accident-kpi .kpi-card-top .demo-tag { font-size: 6px; padding: 4px; }.accident-kpi .kpi-title { font-size: 8px; min-height: 20px; }.accident-kpi .kpi-value { font-size: 21px; }.accident-kpi .kpi-footer { display: grid; justify-items: start; gap: 3px; }.accident-filterbar { padding: 10px; gap: 9px 4px; }.accident-filter { min-width: 0; width: calc(50% - 4px); flex: initial; padding: 0 7px; }.area-filter { width: 100%; flex: initial; padding-top: 8px; border-top: 1px solid #203040; }.filter-demo { width: 100%; margin: 3px 0 0; }.map-frame { height: 355px; margin-top: 10px; }.accident-map-card { padding: 13px 11px 11px; }.map-demo-note { left: 7px; top: 7px; max-width: calc(100% - 52px); padding: 6px 7px; font-size: 7px; }.map-legend { left: 7px; bottom: 7px; gap: 4px; padding: 6px; font-size: 7px; }.map-legend i { width: 6px; height: 6px; margin-left: 1px; }.map-count { right: 7px; bottom: 7px; padding: 6px; font-size: 7px; }.accident-trend-card { padding: 13px 11px 10px; }.trend-chart { height: 200px; }.hotspot-table-card { padding: 13px 10px 0; }.hotspot-table th { font-size: 6px; }.hotspot-table th:first-child { width: 42%; }.table-sort { padding: 6px; font-size: 7px; }.table-footnote { font-size: 7px; }.accident-page-foot { font-size: 6px; }.accident-page-foot span:last-child { text-align: right; } }
+
+/* Historical Accident Intelligence */
+
+.historical-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 9px;
+  border: 1px solid #293d50;
+  border-radius: 5px;
+  color: #83a9d0;
+  background: #101d2a;
+  font-size: 8px;
+  letter-spacing: .02em;
+  white-space: nowrap;
+}
+
+.heading-historical {
+  margin-top: 2px;
+}
+
+.historical-banner {
+  border-color: #58462e;
+}
+
+.historical-banner strong {
+  color: #efb15b;
+}
+
+.historical-banner p {
+  color: #bfad92;
+}
+
+.historical-indicator {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+  color: #8194a8;
+  font-size: 8px;
+  white-space: nowrap;
+}
+
+.historical-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #45cfc0;
+}
+
+.accident-zone-card {
+  min-height: 348px;
+  padding: 16px;
+}
+
+.accident-zone-card .panel-heading {
+  align-items: flex-start;
+}
+/* Zone analytics chart */
+.accident-zone-card {
+  min-height: 348px;
+  padding: 16px;
+}
+
+.accident-zone-card .panel-heading {
+  align-items: flex-start;
+}
+
+.zone-chart {
+  width: 100%;
+  height: 220px;
+  margin-top: 12px;
+}
+
+.zone-total-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 16px;
+  margin-top: 5px;
+  padding-top: 10px;
+  border-top: 1px solid #1c2a39;
+}
+
+.zone-total-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: #8195a8;
+  font-size: 9px;
+}
+
+.zone-total-row strong {
+  color: #dce7ef;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.zone-footnote {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #1c2a39;
+  color: #74899d;
+  font-size: 8px;
+}
+
+.zone-footnote svg {
+  color: #e2a64f;
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .zone-chart {
+    height: 210px;
+  }
+
+  .zone-total-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.station-trends-card {
+  margin-bottom: 12px;
+  padding: 15px 15px 0;
+}
+
+.station-trends-table {
+  min-width: 650px;
+}
+
+.station-trends-table th:first-child {
+  width: 40%;
+}
+
+.station-trend-name {
+  color: #d9e3eb;
+  font-size: 9px;
+  font-weight: 570;
+}
+
+.station-change {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.station-change.increase {
+  color: #f0a94f;
+}
+
+.station-change.decrease {
+  color: #55c5b9;
+}
+
+.station-change.unchanged {
+  color: #91a1b1;
+}
+
+.accident-loading,
+.accident-error {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 110px;
+  padding: 20px;
+  color: #9aafc2;
+  font-size: 12px;
+}
+
+.accident-error {
+  align-items: flex-start;
+  border-color: #69413b;
+}
+
+.accident-error > svg {
+  flex: 0 0 auto;
+  color: #ed927d;
+}
+
+.accident-error strong {
+  color: #f0b19d;
+  font-size: 13px;
+}
+
+.accident-error p {
+  margin: 6px 0 12px;
+  color: #9aafc2;
+  font-size: 11px;
+}
+
+.accident-error button {
+  padding: 7px 11px;
+  border: 1px solid #3b5367;
+  border-radius: 5px;
+  color: #dce7ef;
+  background: #142333;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.accident-empty {
+  padding: 30px 10px;
+  color: #899cad;
+  text-align: center;
+  font-size: 10px;
+}
+
+@media (max-width: 860px) {
+  .historical-indicator {
+    margin-left: 0;
+  }
+
+  .accident-zone-card {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .heading-historical {
+    font-size: 6px;
+    padding: 5px;
+  }
+
+  .historical-banner {
+    padding: 9px 10px;
+  }
+
+  .historical-banner p {
+    font-size: 8px;
+  }
+
+  .accident-zone-card {
+    padding: 13px 11px;
+  }
+
+  .zone-row-main {
+    font-size: 12px;
+  }
+
+  .zone-row-main strong {
+    font-size: 13px;
+  }
+
+  .zone-row-details {
+    font-size: 9px;
+  }
+
+  .station-trends-card {
+    padding: 13px 10px 0;
+  }
+}
 
 /* Keep decorative overlays from intercepting map drag gestures. */
 .map-frame { width: 100%; }
