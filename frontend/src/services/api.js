@@ -32,6 +32,17 @@ export const getAccidentTrends = async () => {
   return response.data
 }
 
+// Live Monitoring APIs (the events are simulated by the backend).
+export const getLiveEvents = async () => {
+  const response = await api.get('/api/live/events')
+  return response.data
+}
+
+export const postNextLiveEvent = async () => {
+  const response = await api.post('/api/live/events/next')
+  return response.data
+}
+
 // Violation APIs
 export const getMotorVehicleYearly = async () => {
   const response = await api.get('/api/violations/motor-vehicle/yearly')

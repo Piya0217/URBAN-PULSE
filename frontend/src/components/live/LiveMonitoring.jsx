@@ -10,9 +10,10 @@ import {
   Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from 'recharts'
 import {
-  createInitialDemoEvents, createSimulatedEvent, liveEventAreas,
+  liveEventAreas,
   liveEventCategories, liveEventSeverities,
 } from '../../data/demoLiveEvents.js'
+import { getLiveEvents, postNextLiveEvent } from '../../services/api.js'
 
 const eventIcons = {
   Accident: CarFront,
@@ -25,7 +26,7 @@ const severityClass = { Low: 'low', Medium: 'medium', High: 'high', Critical: 'c
 const numberFormat = new Intl.NumberFormat('en-IN')
 const tooltipStyle = { background: '#142333', border: '1px solid #2b4354', borderRadius: 8, color: '#edf4fa', fontSize: 10 }
 
-function DemoTag({ children = 'DEMO DATA' }) {
+function DemoTag({ children = 'SIMULATED' }) {
   return <span className="demo-tag"><span className="demo-dot" />{children}</span>
 }
 
@@ -75,15 +76,15 @@ function EventActivityChart({ events }) {
   }, [events])
 
   return <section className="panel live-activity-card"><div className="live-section-heading"><div><div className="eyebrow">STREAM ACTIVITY <DemoTag /></div><h2>Recent event volume</h2><p>Filtered event count over the last hour</p></div><span className="activity-window"><Activity size={13} />60 MIN</span></div>
-    {events.length ? <div className="live-activity-chart"><ResponsiveContainer width="100%" height="100%"><AreaChart data={data} margin={{ top: 10, right: 8, left: -20, bottom: 0 }}><defs><linearGradient id="liveActivityFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#3bcfc2" stopOpacity={0.25} /><stop offset="100%" stopColor="#3bcfc2" stopOpacity={0.01} /></linearGradient></defs><CartesianGrid stroke="#1c2b3d" strokeDasharray="3 5" vertical={false} /><XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fill: '#718398', fontSize: 9 }} dy={7} /><YAxis allowDecimals={false} axisLine={false} tickLine={false} tick={{ fill: '#718398', fontSize: 9 }} /><Tooltip contentStyle={tooltipStyle} formatter={(value) => [value, 'DEMO EVENTS']} /><Area type="monotone" dataKey="events" stroke="#3bcfc2" strokeWidth={2} fill="url(#liveActivityFill)" activeDot={{ r: 4, fill: '#3bcfc2' }} /></AreaChart></ResponsiveContainer></div> : <div className="live-chart-empty"><Activity size={17} /><span>No matching events to chart.</span></div>}
-    <div className="live-chart-foot"><span>Rolling activity · simulated stream</span><span>DEMO DATA</span></div>
+    {events.length ? <div className="live-activity-chart"><ResponsiveContainer width="100%" height="100%"><AreaChart data={data} margin={{ top: 10, right: 8, left: -20, bottom: 0 }}><defs><linearGradient id="liveActivityFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#3bcfc2" stopOpacity={0.25} /><stop offset="100%" stopColor="#3bcfc2" stopOpacity={0.01} /></linearGradient></defs><CartesianGrid stroke="#1c2b3d" strokeDasharray="3 5" vertical={false} /><XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fill: '#718398', fontSize: 9 }} dy={7} /><YAxis allowDecimals={false} axisLine={false} tickLine={false} tick={{ fill: '#718398', fontSize: 9 }} /><Tooltip contentStyle={tooltipStyle} formatter={(value) => [value, 'SIMULATED EVENTS']} /><Area type="monotone" dataKey="events" stroke="#3bcfc2" strokeWidth={2} fill="url(#liveActivityFill)" activeDot={{ r: 4, fill: '#3bcfc2' }} /></AreaChart></ResponsiveContainer></div> : <div className="live-chart-empty"><Activity size={17} /><span>No matching events to chart.</span></div>}
+    <div className="live-chart-foot"><span>Rolling activity · simulated stream</span><span>SIMULATED</span></div>
   </section>
 }
 
-function EventFeed({ events, selectedId, onSelect, running }) {
-  return <section className="panel live-feed-card"><div className="live-section-heading"><div><div className="eyebrow">INCOMING EVENTS <DemoTag /></div><h2>Live event feed</h2><p>Newest events appear at the top.</p></div><span className={`feed-stream-state ${running ? 'feed-running' : 'feed-paused'}`}><i />{running ? 'STREAMING' : 'PAUSED'}</span></div>
+function EventFeed({ events, selectedId, onSelect, running, loading }) {
+  return <section className="panel live-feed-card"><div className="live-section-heading"><div><div className="eyebrow">INCOMING EVENTS <DemoTag /></div><h2>Simulated event feed</h2><p>Newest events appear at the top.</p></div><span className={`feed-stream-state ${running ? 'feed-running' : 'feed-paused'}`}><i />{loading ? 'LOADING' : running ? 'GENERATING' : 'PAUSED'}</span></div>
     <div className="live-feed-head"><span>EVENT / TYPE</span><span>LOCATION</span><span>SEVERITY</span><span>TIME</span><span>STATUS</span></div>
-    {events.length ? <div className="live-feed-list">{events.map((event) => { const Icon = eventIcons[event.eventType] || Activity; return <button type="button" className={`live-feed-row ${selectedId === event.id ? 'live-feed-row-selected' : ''}`} key={event.id} onClick={() => onSelect(event)} title={`View details for ${event.id}`}><span className="feed-type-cell"><span className={`feed-event-icon live-severity-${severityClass[event.severity]}`}><Icon size={15} /></span><span><strong>{event.id}</strong><small>{event.eventType}</small></span></span><span className="feed-location"><MapPin size={12} />{event.location}</span><span><i className={`live-severity-pill live-severity-${severityClass[event.severity]}`}><b />{event.severity}</i></span><time dateTime={event.timestamp}>{timeLabel(event.timestamp)}</time><span><i className={`event-status event-status-${event.status.toLowerCase()}`}>{event.status}</i></span></button> })}</div> : <div className="live-feed-empty"><Radio size={20} /><strong>No events match these filters</strong><span>Change a filter to see the simulated feed.</span></div>}
+    {loading ? <div className="live-feed-empty"><Radio size={20} /><strong>Loading simulated events</strong><span>Fetching the current event list from the backend.</span></div> : events.length ? <div className="live-feed-list">{events.map((event) => { const Icon = eventIcons[event.eventType] || Activity; return <button type="button" className={`live-feed-row ${selectedId === event.id ? 'live-feed-row-selected' : ''}`} key={event.id} onClick={() => onSelect(event)} title={`View details for ${event.id}`}><span className="feed-type-cell"><span className={`feed-event-icon live-severity-${severityClass[event.severity]}`}><Icon size={15} /></span><span><strong>{event.id}</strong><small>{event.eventType}</small></span></span><span className="feed-location"><MapPin size={12} />{event.location}</span><span><i className={`live-severity-pill live-severity-${severityClass[event.severity]}`}><b />{event.severity}</i></span><time dateTime={event.timestamp}>{timeLabel(event.timestamp)}</time><span><i className={`event-status event-status-${event.status.toLowerCase()}`}>{event.status}</i></span></button> })}</div> : <div className="live-feed-empty"><Radio size={20} /><strong>No events match these filters</strong><span>Change a filter to see the simulated feed.</span></div>}
     <div className="live-feed-footer"><span><span className={running ? 'status-dot' : 'status-dot status-dot-muted'} />{running ? 'Simulated stream is active' : 'Stream paused'}</span><span>{events.length} displayed · maximum 60</span></div>
   </section>
 }
@@ -96,25 +97,98 @@ function EventDetails({ event }) {
 }
 
 export default function LiveMonitoring() {
-  const [events, setEvents] = useState(() => createInitialDemoEvents())
-  const [isRunning, setIsRunning] = useState(true)
+  const [events, setEvents] = useState([])
+  const [isRunning, setIsRunning] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [hasLoadedEvents, setHasLoadedEvents] = useState(false)
+  const [error, setError] = useState('')
   const [sessionReceived, setSessionReceived] = useState(0)
   const [selectedId, setSelectedId] = useState(null)
   const [categoryFilter, setCategoryFilter] = useState('All event categories')
   const [severityFilter, setSeverityFilter] = useState('All severities')
   const [areaFilter, setAreaFilter] = useState('All Bengaluru areas')
-  const nextEventId = useRef(5)
+  const mountedRef = useRef(false)
+  const postRequestRef = useRef(null)
 
   useEffect(() => {
-    if (!isRunning) return undefined
-    const intervalId = window.setInterval(() => {
-      const event = createSimulatedEvent(nextEventId.current)
-      nextEventId.current += 1
-      setEvents((currentEvents) => [event, ...currentEvents].slice(0, 60))
-      setSessionReceived((count) => count + 1)
+    let active = true
+    mountedRef.current = true
+
+    async function loadInitialEvents() {
+      try {
+        const response = await getLiveEvents()
+        if (response.status !== 'success' || !Array.isArray(response.data)) {
+          throw new Error('The live events API returned an unexpected response.')
+        }
+
+        if (active) {
+          setEvents(response.data)
+          setHasLoadedEvents(true)
+          setIsRunning(true)
+          setError('')
+        }
+      } catch (requestError) {
+        if (active) {
+          setError(
+            requestError.response?.data?.detail ||
+            requestError.message ||
+            'Unable to load simulated events from the backend.'
+          )
+          setIsRunning(false)
+        }
+      } finally {
+        if (active) setIsLoading(false)
+      }
+    }
+
+    loadInitialEvents()
+
+    return () => {
+      active = false
+      mountedRef.current = false
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!isRunning || isLoading || isRefreshing || !hasLoadedEvents) {
+      return undefined
+    }
+
+    const intervalId = window.setInterval(async () => {
+      // Do not start a second POST while the previous request is pending.
+      if (postRequestRef.current) return
+
+      const request = postNextLiveEvent()
+      postRequestRef.current = request
+
+      try {
+        const response = await request
+        if (response.status !== 'success' || !response.data?.id) {
+          throw new Error('The live events API returned an unexpected event.')
+        }
+
+        if (mountedRef.current) {
+          setEvents((currentEvents) => [response.data, ...currentEvents].slice(0, 60))
+          setSessionReceived((count) => count + 1)
+          setError('')
+        }
+      } catch (requestError) {
+        if (mountedRef.current) {
+          setError(
+            requestError.response?.data?.detail ||
+            requestError.message ||
+            'Unable to request the next simulated event.'
+          )
+        }
+      } finally {
+        if (postRequestRef.current === request) {
+          postRequestRef.current = null
+        }
+      }
     }, 4500)
     return () => window.clearInterval(intervalId)
-  }, [isRunning])
+  }, [isRunning, isLoading, isRefreshing, hasLoadedEvents])
 
   const visibleEvents = useMemo(() => events.filter((event) => (
     (categoryFilter === 'All event categories' || event.eventType === categoryFilter)
@@ -124,24 +198,58 @@ export default function LiveMonitoring() {
   const selectedEvent = visibleEvents.find((event) => event.id === selectedId) || null
   const activeCount = events.filter((event) => event.status === 'Active').length
   const priorityCount = events.filter((event) => event.severity === 'High' || event.severity === 'Critical').length
+  const streamActive = isRunning && hasLoadedEvents && !isLoading && !isRefreshing
 
-  const resetStream = () => {
-    setEvents(createInitialDemoEvents())
+  const refreshStream = async () => {
+    const wasRunning = isRunning
+    setIsRunning(false)
+    setIsRefreshing(true)
     setSessionReceived(0)
     setSelectedId(null)
     setCategoryFilter('All event categories')
     setSeverityFilter('All severities')
     setAreaFilter('All Bengaluru areas')
-    setIsRunning(true)
+
+    try {
+      // Let any event already requested finish before loading the snapshot.
+      if (postRequestRef.current) {
+        await postRequestRef.current.catch(() => {})
+      }
+      if (!mountedRef.current) return
+
+      const response = await getLiveEvents()
+      if (response.status !== 'success' || !Array.isArray(response.data)) {
+        throw new Error('The live events API returned an unexpected response.')
+      }
+
+      if (mountedRef.current) {
+        setEvents(response.data)
+        setHasLoadedEvents(true)
+        setError('')
+        setIsRunning(wasRunning)
+      }
+    } catch (requestError) {
+      if (mountedRef.current) {
+        setError(
+          requestError.response?.data?.detail ||
+          requestError.message ||
+          'Unable to refresh simulated events from the backend.'
+        )
+        setIsRunning(wasRunning)
+      }
+    } finally {
+      if (mountedRef.current) setIsRefreshing(false)
+    }
   }
 
   return <div className="page-content live-page">
     <div className="page-heading live-page-heading"><div><div className="eyebrow page-eyebrow">CITY INTELLIGENCE <span className="heading-separator">/</span> EVENT STREAM</div><h1>Live Monitoring</h1><p>Monitor simulated traffic events and road-safety activity across Bengaluru.</p></div><DemoTag /></div>
-    <div className="live-demo-notice"><span><CircleAlert size={15} /></span><div><strong>DEMO DATA · SIMULATED STREAM</strong><p>This page generates fictional events in your browser. It does not connect to live Bengaluru traffic or incident systems.</p></div></div>
-    <div className="live-summary-grid"><LiveMetric icon={Activity} tone="cyan" label="Total incoming events" value={events.length} helper="In current feed · max 60" /><LiveMetric icon={AlertTriangle} tone="amber" label="Active incidents" value={activeCount} helper="Across current sample events" /><LiveMetric icon={Zap} tone="blue" label="High-priority events" value={priorityCount} helper="High and critical severity" /><LiveMetric icon={Radio} tone="violet" label="Events received in session" value={sessionReceived} helper={isRunning ? 'New events every 4.5 seconds' : 'Waiting while paused'} live={isRunning} /></div>
-    <section className="panel stream-control-panel"><div className="stream-control-info"><span className={`stream-status-icon ${isRunning ? 'stream-status-running' : 'stream-status-paused'}`}>{isRunning ? <Radio size={17} /> : <Pause size={17} />}</span><div><div><strong>Simulated event stream</strong><span className={`stream-status-pill ${isRunning ? 'is-running' : 'is-paused'}`}><i />{isRunning ? 'RUNNING' : 'PAUSED'}</span></div><p>{isRunning ? 'Receiving generated demo events at a steady interval.' : 'Generation is paused. Existing events remain available.'}</p></div></div><div className="stream-buttons"><button type="button" className="stream-button stream-start" onClick={() => setIsRunning(true)} disabled={isRunning}><Play size={14} fill="currentColor" />Start stream</button><button type="button" className="stream-button stream-pause" onClick={() => setIsRunning(false)} disabled={!isRunning}><Pause size={14} />Pause stream</button><button type="button" className="stream-button stream-reset" onClick={resetStream}><RotateCcw size={14} />Reset demo stream</button></div></section>
-    <section className="panel live-filters"><div className="live-filter-title"><span><Activity size={15} /></span><div><strong>Event filters</strong><small>Apply to feed, map and activity</small></div></div><FilterSelect label="Event category" value={categoryFilter} onChange={setCategoryFilter} options={[{ value: 'All event categories', label: 'All categories' }, ...liveEventCategories.map((category) => ({ value: category, label: category }))]} /><FilterSelect label="Severity" value={severityFilter} onChange={setSeverityFilter} options={[{ value: 'All severities', label: 'All severities' }, ...liveEventSeverities.map((severity) => ({ value: severity, label: severity }))]} /><FilterSelect label="Bengaluru area" value={areaFilter} onChange={setAreaFilter} options={[{ value: 'All Bengaluru areas', label: 'All areas' }, ...liveEventAreas.map((area) => ({ value: area.name, label: area.name }))]} /><span className="live-filter-demo"><span className="demo-dot" />Filtered sample view</span></section>
-    <div className="live-workspace-grid"><div className="live-workspace-main"><EventFeed events={visibleEvents} selectedId={selectedId} onSelect={(event) => setSelectedId(event.id)} running={isRunning} /><EventActivityChart events={visibleEvents} /></div><div className="live-workspace-side"><EventMap events={visibleEvents} selectedId={selectedId} onSelect={(event) => setSelectedId(event.id)} /><EventDetails event={selectedEvent} /></div></div>
-    <div className="live-page-footer"><span><Activity size={13} />Simulated in-browser events · FastAPI stream can be connected later.</span><span>NOT LIVE TRAFFIC DATA</span></div>
+    <div className="live-demo-notice"><span><CircleAlert size={15} /></span><div><strong>SIMULATED DATA · BACKEND-GENERATED</strong><p>Events are generated by the URBAN PULSE simulator, not real-time Bengaluru traffic systems. Map coordinates are illustrative.</p></div></div>
+    {error && <div className="live-demo-notice" role="alert"><span><CircleAlert size={15} /></span><div><strong>SIMULATED EVENT REQUEST FAILED</strong><p>{error}</p></div></div>}
+    <div className="live-summary-grid"><LiveMetric icon={Activity} tone="cyan" label="Total incoming events" value={events.length} helper="In current feed · max 60" /><LiveMetric icon={AlertTriangle} tone="amber" label="Active incidents" value={activeCount} helper="Across current simulated events" /><LiveMetric icon={Zap} tone="blue" label="High-priority events" value={priorityCount} helper="High and critical simulated events" /><LiveMetric icon={Radio} tone="violet" label="Events received in session" value={sessionReceived} helper={streamActive ? 'New simulated events every 4.5 seconds' : 'Waiting while paused'} live={streamActive} /></div>
+    <section className="panel stream-control-panel"><div className="stream-control-info"><span className={`stream-status-icon ${streamActive ? 'stream-status-running' : 'stream-status-paused'}`}>{streamActive ? <Radio size={17} /> : <Pause size={17} />}</span><div><div><strong>Simulated event stream</strong><span className={`stream-status-pill ${streamActive ? 'is-running' : 'is-paused'}`}><i />{isLoading ? 'LOADING' : isRefreshing ? 'REFRESHING' : streamActive ? 'GENERATING' : 'PAUSED'}</span></div><p>{isLoading ? 'Loading simulated events from the backend.' : streamActive ? 'Requesting generated simulated events every 4.5 seconds.' : 'Generation is paused. Existing backend events remain available.'}</p></div></div><div className="stream-buttons"><button type="button" className="stream-button stream-start" onClick={() => setIsRunning(true)} disabled={isRunning || isLoading || isRefreshing || !hasLoadedEvents}><Play size={14} fill="currentColor" />Start stream</button><button type="button" className="stream-button stream-pause" onClick={() => setIsRunning(false)} disabled={!isRunning || isRefreshing}><Pause size={14} />Pause stream</button><button type="button" className="stream-button stream-reset" onClick={refreshStream} disabled={isRefreshing || isLoading}><RotateCcw size={14} />{isRefreshing ? 'Refreshing...' : 'Refresh simulated feed'}</button></div></section>
+    <section className="panel live-filters"><div className="live-filter-title"><span><Activity size={15} /></span><div><strong>Event filters</strong><small>Apply to feed, map and activity</small></div></div><FilterSelect label="Event category" value={categoryFilter} onChange={setCategoryFilter} options={[{ value: 'All event categories', label: 'All categories' }, ...liveEventCategories.map((category) => ({ value: category, label: category }))]} /><FilterSelect label="Severity" value={severityFilter} onChange={setSeverityFilter} options={[{ value: 'All severities', label: 'All severities' }, ...liveEventSeverities.map((severity) => ({ value: severity, label: severity }))]} /><FilterSelect label="Bengaluru area" value={areaFilter} onChange={setAreaFilter} options={[{ value: 'All Bengaluru areas', label: 'All areas' }, ...liveEventAreas.map((area) => ({ value: area.name, label: area.name }))]} /><span className="live-filter-demo"><span className="demo-dot" />Filtered simulated events</span></section>
+    <div className="live-workspace-grid"><div className="live-workspace-main"><EventFeed events={visibleEvents} selectedId={selectedId} onSelect={(event) => setSelectedId(event.id)} running={streamActive} loading={isLoading && !hasLoadedEvents} /><EventActivityChart events={visibleEvents} /></div><div className="live-workspace-side"><EventMap events={visibleEvents} selectedId={selectedId} onSelect={(event) => setSelectedId(event.id)} /><EventDetails event={selectedEvent} /></div></div>
+    <div className="live-page-footer"><span><Activity size={13} />Backend-generated simulated events · not real-time traffic.</span><span>NOT LIVE TRAFFIC DATA</span></div>
   </div>
 }
