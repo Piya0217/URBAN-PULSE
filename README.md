@@ -37,17 +37,9 @@ Python 3.11 is the project environment version; PySpark 4.3.0 is pinned in `requ
 
 ## Architecture
 
-```mermaid
-flowchart LR
-    CSV[Raw CSV datasets] --> ING[Python ingestion, cleaning, and validation]
-    ING --> SPARK[PySpark analytics]
-    SPARK --> PARQUET[Processed Parquet analytics]
-    PARQUET --> API[FastAPI backend]
-    API --> WEB[React and Vite dashboard]
-    SIM[Python simulated event generator] --> API
-```
+The architecture is documented in two complementary diagrams: the batch historical data pipeline and the application runtime with its separate simulated-event path. They show the local CSV and Parquet files, processing and validation scripts, FastAPI routes, React pages, and OpenStreetMap basemap connection.
 
-The analytics API reads prepared Parquet files through a shared Pandas-based data service. Live Monitoring is a separate simulated event flow and does not consume actual traffic sensors or incident feeds.
+See [the detailed system architecture](docs/architecture.md). Historical crash intelligence is based on recorded 2023–2025 analysis; predictive forecasts and risk scores remain illustrative. Live Monitoring generates simulated events and uses illustrative marker coordinates.
 
 ## Repository structure
 
@@ -55,6 +47,8 @@ The analytics API reads prepared Parquet files through a shared Pandas-based dat
 README.md
 requirements.txt
 .gitignore
+docs/
+  architecture.md            Batch pipeline and application runtime diagrams
 backend/
   app/
     routers/                 FastAPI route modules
