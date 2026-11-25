@@ -179,7 +179,72 @@ def test_insights():
     print("PASS | /api/insights/accidents")
 
 
+def test_live_monitoring():
+    print("\n========== LIVE MONITORING TESTS ==========")
+
+    # Check the current event feed.
+    response = requests.get(
+        BASE_URL + "/api/live/events",
+        timeout=30
+    )
+    response.raise_for_status()
+    initial = response.json()
+
+    assert initial["status"] == "success"
+    assert initial["count"] == len(initial["data"])
+    assert 1 <= initial["count"] <= 60
+
+    print(f"PASS | GET /api/live/events | Records: {initial['count']}")
+
+    # Generate one new simulated event.
+    response = requests.post(
+        BASE_URL + "/api/live/events/next",
+        timeout=30
+    )
+    response.raise_for_status()
+    created = response.json()
+
+    assert created["status"] == "success"
+    assert created["count"] == 1
+
+    event = created["data"]
+
+    expected_fields = {
+        "id",
+        "eventType",
+        "location",
+        "severity",
+        "timestamp",
+        "status",
+        "coordinates",
+        "source",
+    }
+
+    assert expected_fields.issubset(event.keys())
+    assert event["source"] == "simulated-stream"
+    assert {"lat", "lng"}.issubset(event["coordinates"].keys())
+
+    print(f"PASS | POST /api/live/events/next | Event: {event['id']}")
+
+    # Confirm the new event appears first in the feed.
+    response = requests.get(
+        BASE_URL + "/api/live/events",
+        timeout=30
+    )
+    response.raise_for_status()
+    updated = response.json()
+
+    assert updated["status"] == "success"
+    assert updated["data"][0]["id"] == event["id"]
+    assert updated["count"] == min(initial["count"] + 1, 60)
+    assert updated["count"] == len(updated["data"])
+    assert updated["count"] <= 60
+
+    print(f"PASS | Live event feed update | Records: {updated['count']}")
+
+
 if __name__ == "__main__":
     test_endpoints()
     test_overview()
     test_insights()
+    test_live_monitoring()
