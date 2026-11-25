@@ -32,6 +32,12 @@ export const getAccidentTrends = async () => {
   return response.data
 }
 
+// Historical crash insights API
+export const getAccidentInsights = async () => {
+  const response = await api.get('/api/insights/accidents')
+  return response.data
+}
+
 // Live Monitoring APIs (the events are simulated by the backend).
 export const getLiveEvents = async () => {
   const response = await api.get('/api/live/events')
